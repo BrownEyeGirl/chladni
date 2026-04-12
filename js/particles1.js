@@ -47,7 +47,9 @@ let bassEnergy;
 let bassThreshold = 1.1; 
 let lastBass = 0; 
 let midEnergy; 
+let lastMid=0; 
 let trebleEnergy; 
+let lastTreble=0; 
 let volume; 
 let dominantFreq; 
 
@@ -169,7 +171,7 @@ function draw() {
 
     findSpike(); 
     bassThreshold = (bassThresholdSlider.value())/100; 
-    particleSpeed = (particleSpeedSlider.value());
+    particleSpeed = (particleSpeedSlider.value()); // this
 
 
     /* Beat on BPM Intervals */ 
@@ -276,19 +278,23 @@ class Particle {
         }*/
 
         //let shade = map(dist(width/2, height/2, this.pos.x, this.pos.y), 0, width/2, 1, 255));
-        distVal = dist(width/2, height/2, this.pos.x, this.pos.y)
-        stroke(dist(width,random(200, 600), this.pos.x, this.pos.y), distVal/2, dist(0,random(0, 100), this.pos.x, this.pos.y)/2); 
+        distVal = dist(width/2, height/2, this.pos.x, this.pos.y) // distance particle is from centre 
+        // color 
+        stroke(
+          dist(width,random(10, 100), this.pos.x, this.pos.y)/random(3,6),
+              distVal/2, dist(0,random(30, 500), this.pos.x, this.pos.y)*random(1,3)); 
        // stroke(255);
         //console.log(dist(width/2, height/2, this.pos.x, this.pos.y));
         //strokeWeight()
 
        //stroke(0);
        //strokeWeight(dist(width/4, height/4, this.pos.x, this.pos.y))
+       // stroke weight 
        if(distVal <= width/2) {
-        strokeWeight(map(bassEnergy, 90, 200, 1, 2)*random(1, map(distVal, 0, width/2, 5, 1))  );
+        strokeWeight(map(bassEnergy, 90, 200, 0.4, 1.5)*random(1, map(distVal, 0, width/2, 5, 1))  );
        }
        else {
-        strokeWeight(1)
+        strokeWeight(map(bassEnergy, 90, 200, 0.4, 1.5)*random(1, map(distVal, 0, width/2, 5, 1)))
        }
        point(this.pos.x, this.pos.y);
     }
@@ -299,8 +305,8 @@ class Particle {
 
 function newPattern() {
     // choose new random mode numbers
-    m = floor(random(minMN, maxMN)); // between 1 and 8
-    n = floor(random(minMN, maxMN));
+   // m = floor(random(minMN, maxMN)); // between 1 and 8
+   // n = floor(random(minMN, maxMN));
 
   /*if(20 < dominantFreq <=85) {
     m = floor(random(1, 2));
@@ -317,7 +323,7 @@ function newPattern() {
     m = floor(random(6, 12));
     n = floor(random(6, 12)); 
 
-  }*/
+  } */
 
   //console.log(m,n); 
 
@@ -331,6 +337,9 @@ function newPattern() {
 
   //m = map(bassEnergy, 0, 200)  //if()
 
+  n = floor(midEnergy/15); 
+  m = floor(trebleEnergy/15); 
+
   // makes sure program doesn't freeze (prevents error in chlandi numbers when both are zero) 
     if (m === n) {
         m++;
@@ -339,7 +348,7 @@ function newPattern() {
     // resets all particles to fluid state 
     for (let p of particles) {
         p.stuck = false;
-        p.vel = p5.Vector.random2D().mult(random(0.5, particleSpeed));
+        p.vel = p5.Vector.random2D().mult(random(0.1, particleSpeed));
     }
   
 }
@@ -347,7 +356,7 @@ function newPattern() {
 
 
 
-
+let mean;  
 
 /* Calculates frequency of a song */ 
 function getFrequencies() {
@@ -359,13 +368,17 @@ function getFrequencies() {
     bassEnergy = fft.getEnergy(90, 200);
     //console.log(bassEnergy);  
     midEnergy = fft.getEnergy(200, 2000); 
+    console.log(midEnergy); 
+
     trebleEnergy = fft.getEnergy(2000, 8000);
    // volume = amp.getLevel(); 
    // console.log("Vol: " + volume); 
 
-   console.log(bassEnergy);
+  // console.log(bassEnergy);
 
-    //console.log(topEnergy); 
+   /* Find volume variance in fft */ 
+  mean = spectrum.reduce((a, b) => a + b, 0) / spectrum.length;
+  //console.log(mean)
 
     
     /* Find dominant frequency */ 
@@ -392,7 +405,7 @@ function showStats() {
  */
 function findSpike() {
   /* Bass Spike Direction */ 
-  console.log("findspike");
+  //console.log("findspike");
   let spike = false;
 
   /*if (bassEnergy > lastBass * bassThreshold && bassEnergy > 30) {
@@ -400,6 +413,7 @@ function findSpike() {
     newPattern(); 
     console.log("spike"); 
   }*/
+ 
 
   if (
   bassEnergy > lastBass * bassThreshold &&
