@@ -311,9 +311,9 @@ class Particle {
         distVal = dist(width/2, height/2, this.pos.x, this.pos.y) // distance particle is from centre 
         // color 
         stroke(
-          dist(width,random(0, 250), this.pos.x, this.pos.y)/3, // 
+          dist(width,random(0, 250), this.pos.x, this.pos.y)/2, // 
               distVal*trebleEnergy/200, 
-              dist(0,random(0, 300), this.pos.x, this.pos.y)); 
+              dist(0,random(0, 300), this.pos.x, this.pos.y))*9; 
        // stroke(255);
         //console.log(dist(width/2, height/2, this.pos.x, this.pos.y));
         //strokeWeight()
