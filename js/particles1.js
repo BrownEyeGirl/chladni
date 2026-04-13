@@ -134,25 +134,55 @@ function setup() {
 
     /* Sliders */
    // Slider 1
+   const sliders = document.getElementById("slider"); 
+   sliders.style.display="block"; 
+
+  console.log(sliders.style.display)
    bassThresholdSlider = createSlider(80, 150, 110, 1);
    bassThresholdSlider.addClass("bass-threshold-slider"); 
 
    container1 = createDiv();
    container1.addClass("slider-container1");
 
+   document.body.style.color="white"; 
+
+
     label1 = createSpan("Bass Sensitivity: ");
     label1.addClass("slider-label1");
 
+
     label1.parent(container1);
     bassThresholdSlider.parent(container1);
+    container1.parent(sliders); 
+
 
     // Slider 2
     particleSpeedSlider = createSlider(1, 20, 10, 1); 
     container2 = createDiv(); 
+    container2.parent(sliders); 
+
     label2 = createSpan("Particle Speed: "); 
 
     label2.parent(container2);
     particleSpeedSlider.parent(container2); 
+    //sliders.style.display="none"; 
+
+
+    /// Create checkbox (p5 version)
+const checkbox = createCheckbox("Hide sliders", false);
+
+// Attach it to sliders container (or wherever you want)
+checkbox.parent(sliders);
+
+// Add change event (better than onclick)
+checkbox.changed(function () {
+  if (this.checked()) {
+    sliders.style.display="none";
+  } else {
+    sliders.style.display = "block";
+  }
+});
+
 
     //bassThresholdSlider = createSlider(80, 150, 110, 1);
     //bassThresholdSlider.addClass("bass-threshold-slider"); 
@@ -281,8 +311,8 @@ class Particle {
         distVal = dist(width/2, height/2, this.pos.x, this.pos.y) // distance particle is from centre 
         // color 
         stroke(
-          dist(width,random(10, 100), this.pos.x, this.pos.y)/random(3,6),
-              distVal/2, dist(0,random(30, 500), this.pos.x, this.pos.y)*random(1,3)); 
+          dist(width,random(10, 250), this.pos.x, this.pos.y)/random(1),
+              distVal/200, dist(0,random(30, 250), this.pos.x, this.pos.y)*random(1)); 
        // stroke(255);
         //console.log(dist(width/2, height/2, this.pos.x, this.pos.y));
         //strokeWeight()
@@ -291,10 +321,10 @@ class Particle {
        //strokeWeight(dist(width/4, height/4, this.pos.x, this.pos.y))
        // stroke weight 
        if(distVal <= width/2) {
-        strokeWeight(map(bassEnergy, 90, 200, 0.4, 1.5)*random(1, map(distVal, 0, width/2, 5, 1))  );
+        strokeWeight(map(bassEnergy, 90, 200, 0.9, 1.5)*random(1, map(distVal, 0, width/2, 5, 1))  );
        }
        else {
-        strokeWeight(map(bassEnergy, 90, 200, 0.4, 1.5)*random(1, map(distVal, 0, width/2, 5, 1)))
+        strokeWeight(map(bassEnergy, 90, 200, 1.0, 1.9)*random(1, map(distVal, 0, width/2, 5, 1)))
        }
        point(this.pos.x, this.pos.y);
     }
@@ -368,7 +398,7 @@ function getFrequencies() {
     bassEnergy = fft.getEnergy(90, 200);
     //console.log(bassEnergy);  
     midEnergy = fft.getEnergy(200, 2000); 
-    console.log(midEnergy); 
+    //console.log(midEnergy); 
 
     trebleEnergy = fft.getEnergy(2000, 8000);
    // volume = amp.getLevel(); 
@@ -462,7 +492,7 @@ function findHatSpike() {
   if (hatEnergy > lastHat * hatThreshold && hatEnergy > 30) {
     hatSpike = true;
     newPattern(); 
-    console.log("hatSpike"); 
+    //console.log("hatSpike"); 
   }
 
   lastBass = bassEnergy;
