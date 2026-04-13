@@ -322,10 +322,10 @@ class Particle {
        //strokeWeight(dist(width/4, height/4, this.pos.x, this.pos.y))
        // stroke weight 
        if(distVal <= width/2) {
-        strokeWeight(map(bassEnergy, 90, 200, 0.9, 1.5)*random(1, map(distVal, 0, width/2, 5, 1))  );
+        strokeWeight(map(bassEnergy, 90, 200, 0.5, 1.5)*random(1, map(distVal, 0, width/2, 5, 1))  );
        }
        else {
-        strokeWeight(map(bassEnergy, 90, 200, 0, 2.8)*random(1, map(distVal, 0, width/2, 5, 1)))
+        strokeWeight(map(bassEnergy, 90, 200, 0.5, 2.8)*random(1, map(distVal, 0, width/2, 5, 1)))
        }
        point(this.pos.x, this.pos.y);
     }
