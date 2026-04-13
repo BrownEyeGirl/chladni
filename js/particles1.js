@@ -311,8 +311,9 @@ class Particle {
         distVal = dist(width/2, height/2, this.pos.x, this.pos.y) // distance particle is from centre 
         // color 
         stroke(
-          dist(width,random(10, 250), this.pos.x, this.pos.y)/random(1),
-              distVal/200, dist(0,random(30, 250), this.pos.x, this.pos.y)*random(1)); 
+          dist(width,random(0, 250), this.pos.x, this.pos.y)/3, // 
+              distVal*trebleEnergy/200, 
+              dist(0,random(0, 300), this.pos.x, this.pos.y)); 
        // stroke(255);
         //console.log(dist(width/2, height/2, this.pos.x, this.pos.y));
         //strokeWeight()
@@ -324,7 +325,7 @@ class Particle {
         strokeWeight(map(bassEnergy, 90, 200, 0.9, 1.5)*random(1, map(distVal, 0, width/2, 5, 1))  );
        }
        else {
-        strokeWeight(map(bassEnergy, 90, 200, 1.0, 1.9)*random(1, map(distVal, 0, width/2, 5, 1)))
+        strokeWeight(map(bassEnergy, 90, 200, 0, 2.8)*random(1, map(distVal, 0, width/2, 5, 1)))
        }
        point(this.pos.x, this.pos.y);
     }
